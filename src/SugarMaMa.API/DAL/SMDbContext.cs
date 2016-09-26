@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using SugarMaMa.API.DAL.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +8,12 @@ namespace SugarMaMa.API.DAL
 {
     public class SMDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Esthetician> Estheticians { get; set; }
+        public DbSet<SpaService> SpaServices { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<BusinessDay> BusinessDays { get; set; }
+
         public SMDbContext(DbContextOptions<SMDbContext> options)
            : base(options)
         { }

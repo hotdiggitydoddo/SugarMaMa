@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,8 +7,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using SugarMaMa.API.DAL.Entities;
 using SugarMaMa.API.DAL;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using SugarMaMa.API.Services;
+using SugarMaMa.API.DAL.Repositories;
 
 namespace SugarMaMa.API
 {
@@ -48,6 +45,8 @@ namespace SugarMaMa.API
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.AddTransient<IRepository<Esthetician>, Repository<Esthetician>>();
 
             var connectionString = Configuration["DbConnectionString"]; //Configuration["DbContextSettings:ConnectionString"];
 
