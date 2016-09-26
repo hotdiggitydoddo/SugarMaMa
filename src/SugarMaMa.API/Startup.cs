@@ -96,6 +96,8 @@ namespace SugarMaMa.API
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            DbContextExtensions.Seed(app);
+
             app.UseApplicationInsightsRequestTelemetry();
 
             app.UseApplicationInsightsExceptionTelemetry();
