@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SugarMaMa.API.DAL.Repositories
 {
-    public class Repository<T> : IRepository<T> where T: SMEntity
+    public class Repository<T, TKey> : IRepository<T, TKey> where T: SMEntity<TKey>
     {
         private readonly SMDbContext _db;
         public Repository(SMDbContext context)
@@ -43,14 +43,14 @@ namespace SugarMaMa.API.DAL.Repositories
             return await query.Where(where).ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
+        public async Task<T> GetByIdAsync(TKey id, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _db.Set<T>();
 
             foreach (var property in includes)
                 query.Include(property);
 
-            return await query.SingleOrDefaultAsync(x => x.Id == id);
+            return await query.SingleOrDefaultAsync(x => Equals(x.Id, id));
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SugarMaMa.API.DAL.Entities
 {
-    public class Esthetician : SMEntity
+    public class Esthetician : SMEntity<int>
     {
         public Guid ApplicationUserId { get; set; }
         public ApplicationUser User { get; set; }

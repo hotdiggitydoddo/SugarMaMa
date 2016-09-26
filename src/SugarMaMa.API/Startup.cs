@@ -46,7 +46,7 @@ namespace SugarMaMa.API
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            services.AddTransient<IRepository<Esthetician>, Repository<Esthetician>>();
+            services.AddTransient<IRepository<Esthetician, int>, Repository<Esthetician, int>>();
 
             var connectionString = Configuration["DbConnectionString"]; //Configuration["DbContextSettings:ConnectionString"];
 

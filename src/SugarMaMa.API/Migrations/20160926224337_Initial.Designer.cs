@@ -8,8 +8,8 @@ using SugarMaMa.API.DAL;
 namespace SugarMaMa.API.Migrations
 {
     [DbContext(typeof(SMDbContext))]
-    [Migration("20160926061707_Entities")]
-    partial class Entities
+    [Migration("20160926224337_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -180,30 +180,10 @@ namespace SugarMaMa.API.Migrations
 
             modelBuilder.Entity("SugarMaMa.API.DAL.Entities.Appointment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
-
-                    b.Property<DateTime>("EndTime");
-
-                    b.Property<int>("EstheticianId");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("RemindViaEmail");
-
-                    b.Property<bool>("RemindViaText");
-
-                    b.Property<DateTime>("StartTime");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("EstheticianId");
 
                     b.ToTable("Appointments");
                 });
@@ -258,12 +238,32 @@ namespace SugarMaMa.API.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("SugarMaMa.API.DAL.Entities.SpaService", b =>
+            modelBuilder.Entity("SugarMaMa.API.DAL.Entities.ShiftTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AppointmentId");
+                    b.Property<int>("BusinessDayId");
+
+                    b.Property<DateTime>("EndTime");
+
+                    b.Property<int>("EstheticianId");
+
+                    b.Property<DateTime>("StartTime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessDayId");
+
+                    b.HasIndex("EstheticianId");
+
+                    b.ToTable("ShiftTemplates");
+                });
+
+            modelBuilder.Entity("SugarMaMa.API.DAL.Entities.SpaService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<decimal>("Cost");
 
@@ -279,9 +279,9 @@ namespace SugarMaMa.API.Migrations
 
                     b.Property<string>("Name");
 
-                    b.HasKey("Id");
+                    b.Property<int>("ServiceType");
 
-                    b.HasIndex("AppointmentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("EstheticianId");
 
@@ -325,14 +325,6 @@ namespace SugarMaMa.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SugarMaMa.API.DAL.Entities.Appointment", b =>
-                {
-                    b.HasOne("SugarMaMa.API.DAL.Entities.Esthetician", "Esthetician")
-                        .WithMany()
-                        .HasForeignKey("EstheticianId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("SugarMaMa.API.DAL.Entities.BusinessDay", b =>
                 {
                     b.HasOne("SugarMaMa.API.DAL.Entities.Location", "Location")
@@ -349,12 +341,21 @@ namespace SugarMaMa.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("SugarMaMa.API.DAL.Entities.ShiftTemplate", b =>
+                {
+                    b.HasOne("SugarMaMa.API.DAL.Entities.BusinessDay", "BusinessDay")
+                        .WithMany()
+                        .HasForeignKey("BusinessDayId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SugarMaMa.API.DAL.Entities.Esthetician", "Esthetician")
+                        .WithMany()
+                        .HasForeignKey("EstheticianId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("SugarMaMa.API.DAL.Entities.SpaService", b =>
                 {
-                    b.HasOne("SugarMaMa.API.DAL.Entities.Appointment")
-                        .WithMany("Services")
-                        .HasForeignKey("AppointmentId");
-
                     b.HasOne("SugarMaMa.API.DAL.Entities.Esthetician")
                         .WithMany("Services")
                         .HasForeignKey("EstheticianId");

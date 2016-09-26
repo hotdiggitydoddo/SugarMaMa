@@ -13,6 +13,8 @@ namespace SugarMaMa.API.DAL
         public DbSet<SpaService> SpaServices { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<BusinessDay> BusinessDays { get; set; }
+        public DbSet<ShiftTemplate> ShiftTemplates { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
 
         public SMDbContext(DbContextOptions<SMDbContext> options)
            : base(options)

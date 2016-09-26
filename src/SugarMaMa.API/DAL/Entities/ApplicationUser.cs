@@ -7,12 +7,12 @@ namespace SugarMaMa.API.DAL.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-       // public Gender Gender { get; set; }
+        public Gender Gender { get; set; }
     }
 
-    //public enum Gender
-    //{
-    //    Female,
-    //    Male
-    //}
+    public enum Gender
+    {
+        Female = 0,
+        Male = 1
+    }
 }
