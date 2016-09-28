@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SugarMaMa.API.DAL.Entities;
 
 namespace SugarMaMa.API.Controllers
 {
@@ -21,7 +22,16 @@ namespace SugarMaMa.API.Controllers
         public async Task<IActionResult> Get()
         {
             var services = await _spaService.GetAllAsync();
-            return Ok(services);
+            var spaServices = services as SpaService[] ?? services.ToArray();
+
+            var hairRemoval = spaServices.Where(x => x.ServiceType == SpaServiceTypes.HairRemoval);
+            var facials = spaServices.Where(x => x.ServiceType == SpaServiceTypes.Facial);
+            var tanning = spaServices.Where(x => x.ServiceType == SpaServiceTypes.Tanning);
+            var tinting = spaServices.Where(x => x.ServiceType == SpaServiceTypes.Tinting);
+            var peels = spaServices.Where(x => x.ServiceType == SpaServiceTypes.ChemicalPeel);
+            var microderm = spaServices.Where(x => x.ServiceType == SpaServiceTypes.Microderm);
+
+            return Ok(new { hairRemoval, facials, tanning, tinting, peels, microderm });
         }
     }
 }
