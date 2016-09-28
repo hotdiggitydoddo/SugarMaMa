@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SugarMaMa.API.Models.Appointments;
+using SugarMaMa.API.Services;
+
 
 namespace SugarMaMa.API.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class EstheticianController : Controller
     {
-        // GET api/values
+        private readonly IEstheticianService _estheticians;
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = await _estheticians.GetEstheticiansAsync();
+            return Ok(result);
         }
 
         // GET api/values/5
@@ -26,9 +29,8 @@ namespace SugarMaMa.API.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]AppointmentBookingModel model)
+        public void Post([FromBody]string value)
         {
-            var a = 1;
         }
 
         // PUT api/values/5
