@@ -27,14 +27,17 @@ namespace SugarMaMa.API
                 AddBusinessDays(context);
                 context.SaveChanges();
 
-                //                AddSpaServices(context);
+                AddSpaServices(context);
+                context.SaveChanges();
 
             }
         }
 
         private static void AddSpaServices(SMDbContext context)
         {
-            throw new NotImplementedException();
+            context.AddRange(
+                new SpaService { Name = "Lip", Cost = 10M, Description = "Lips to kiss", ServiceType = SpaServiceTypes.HairRemoval, IsQuickService = true, Duration = TimeSpan.FromMinutes(15) }
+                );
         }
 
         private static void AddBusinessDays(SMDbContext context)

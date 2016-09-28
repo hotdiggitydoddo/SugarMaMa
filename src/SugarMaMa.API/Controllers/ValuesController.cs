@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SugarMaMa.API.Models.Appointments;
 
 namespace SugarMaMa.API.Controllers
 {
@@ -25,8 +26,9 @@ namespace SugarMaMa.API.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]AppointmentBookingModel model)
         {
+            var a = 1;
         }
 
         // PUT api/values/5

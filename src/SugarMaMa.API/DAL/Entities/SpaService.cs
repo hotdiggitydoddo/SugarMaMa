@@ -10,6 +10,7 @@ namespace SugarMaMa.API.DAL.Entities
         public TimeSpan Duration { get; set; }
         public bool IsQuickService { get; set; }
         public bool IsPremium { get; set; }
+        public bool IsUnisex { get; set; }
         public SpaServiceTypes ServiceType { get; set; }
     }
 

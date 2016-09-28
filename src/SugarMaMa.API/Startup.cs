@@ -47,6 +47,8 @@ namespace SugarMaMa.API
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
             services.AddTransient<IRepository<Esthetician, int>, Repository<Esthetician, int>>();
+            services.AddTransient<IRepository<SpaService, int>, Repository<SpaService, int>>();
+            services.AddTransient<ISpaServicesService, SpaServicesService>();
 
             var connectionString = Configuration["DbConnectionString"]; //Configuration["DbContextSettings:ConnectionString"];
 
@@ -68,14 +70,6 @@ namespace SugarMaMa.API
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseOAuthValidation();
-            //app.UseJwtBearerAuthentication(new JwtBearerOptions
-            //{
-            //    AutomaticAuthenticate = true,
-            //    AutomaticChallenge = true,
-            //    RequireHttpsMetadata = false,
-            //    Audience = "http://localhost:2135/",
-            //    Authority = "http://localhost:2135/",
-            //});
 
             app.UseOpenIdConnectServer(options => {
                 // Create your own authorization provider by subclassing
@@ -85,9 +79,11 @@ namespace SugarMaMa.API
                 // Enable the authorization and token endpoints.
                 options.AuthorizationEndpointPath = "/api/authorize";
                 options.TokenEndpointPath = "/api/token";
+
                 // During development, you can set AllowInsecureHttp
                 // to true to disable the HTTPS requirement.
-                options.AllowInsecureHttp = true;
+                if (env.IsDevelopment())
+                    options.AllowInsecureHttp = true;
 
                 // Note: uncomment this line to issue JWT tokens.
                 // options.AccessTokenHandler = new JwtSecurityTokenHandler();
@@ -96,7 +92,8 @@ namespace SugarMaMa.API
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            DbContextExtensions.Seed(app);
+            if (env.IsDevelopment() || env.IsStaging())
+                DbContextExtensions.Seed(app);
 
             app.UseApplicationInsightsRequestTelemetry();
 
