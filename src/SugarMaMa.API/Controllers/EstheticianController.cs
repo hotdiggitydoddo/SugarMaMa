@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SugarMaMa.API.Services;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace SugarMaMa.API.Controllers
 {
@@ -13,7 +13,13 @@ namespace SugarMaMa.API.Controllers
     {
         private readonly IEstheticianService _estheticians;
 
+        public EstheticianController(IEstheticianService estheticians)
+        {
+            _estheticians = estheticians;
+        }
+
         [HttpGet]
+        [Authorize(Roles = "Esthetician")]
         public async Task<IActionResult> Get()
         {
             var result = await _estheticians.GetEstheticiansAsync();

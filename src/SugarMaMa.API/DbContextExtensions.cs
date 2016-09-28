@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using SugarMaMa.API.DAL;
@@ -15,6 +16,9 @@ namespace SugarMaMa.API
     {
         public static void Seed(IApplicationBuilder app)
         {
+            var userManager = app.ApplicationServices.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = app.ApplicationServices.GetRequiredService<RoleManager<ApplicationRole>>();
+
             using (var context = app.ApplicationServices.GetRequiredService<SMDbContext>())
             {
                 // perform database delete and create
@@ -30,7 +34,65 @@ namespace SugarMaMa.API
                 AddSpaServices(context);
                 context.SaveChanges();
 
+                AddRoles(roleManager);
+                AddUsers(userManager);
+                AddUsersToRoles(userManager, roleManager);
+
+                AddEstheticians(userManager, roleManager, context);
             }
+        }
+
+        private static void AddEstheticians(UserManager<ApplicationUser> users, RoleManager<ApplicationRole> roles, SMDbContext context)
+        {
+            var esthUser = users.FindByEmailAsync("eve@test.com").Result;
+            var allServices = context.SpaServices.ToList();
+
+            var esthetician = new Esthetician
+            {
+                ApplicationUserId = esthUser.Id,
+                Services = allServices
+            };
+
+            context.Estheticians.Add(esthetician);
+            context.SaveChanges();
+        }
+
+        private static void AddRoles(RoleManager<ApplicationRole> roleManager)
+        {
+            Task.FromResult(roleManager.CreateAsync(new ApplicationRole {Name = "Admin"}).Result);
+            Task.FromResult(roleManager.CreateAsync(new ApplicationRole { Name = "Esthetician" }).Result);
+            Task.FromResult(roleManager.CreateAsync(new ApplicationRole { Name = "Client" }).Result);
+        }
+
+        private static void AddUsers(UserManager<ApplicationUser> users)
+        {
+            var adminUser = new ApplicationUser
+            {
+                UserName = "admin@test.com",
+                Email = "admin@test.com",
+                FirstName = "Alice",
+                LastName = "Smith"
+            };
+            
+            var estheticianUser = new ApplicationUser
+            {
+                UserName = "eve@test.com",
+                Email = "eve@test.com",
+                FirstName = "Eve",
+                LastName = "Smith",
+            };
+
+            Task.FromResult(users.CreateAsync(adminUser, "admin11").Result);
+            Task.FromResult(users.CreateAsync(estheticianUser, "regular11").Result);
+        }
+
+        private static void AddUsersToRoles(UserManager<ApplicationUser> users, RoleManager<ApplicationRole> roleManager)
+        {
+            var admin = users.FindByEmailAsync("admin@test.com").Result;
+            var esthetician = users.FindByEmailAsync("eve@test.com").Result;
+
+            Task.FromResult(users.AddToRolesAsync(admin, new[] {"Admin", "Esthetician"}).Result);
+            Task.FromResult(users.AddToRoleAsync(esthetician, "Esthetician").Result);
         }
 
         private static void AddSpaServices(SMDbContext context)
@@ -56,5 +118,7 @@ namespace SugarMaMa.API
                 new Location { Address1 = "451 W. Lambert Rd. - Suite 207", Address2 = "Brea, CA 92821", BusinessDays = new List<BusinessDay>(), PhoneNumber = "562.484.8653" }
                 );
         }
+
+        //private static void Add
     }
 }

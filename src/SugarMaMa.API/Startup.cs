@@ -49,6 +49,7 @@ namespace SugarMaMa.API
             services.AddTransient<IRepository<Esthetician, int>, Repository<Esthetician, int>>();
             services.AddTransient<IRepository<SpaService, int>, Repository<SpaService, int>>();
             services.AddTransient<ISpaServicesService, SpaServicesService>();
+            services.AddTransient<IEstheticianService, EstheticianService>();
 
             var connectionString = Configuration["DbConnectionString"]; //Configuration["DbContextSettings:ConnectionString"];
 
