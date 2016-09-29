@@ -13,7 +13,7 @@ namespace SugarMaMa.API.Controllers
 {
     [Authorize]
     [Route("api/[Controller]")]
-    public class AccountController : Controller
+    public class AccountsController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -21,7 +21,7 @@ namespace SugarMaMa.API.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
-        public AccountController(
+        public AccountsController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
@@ -32,7 +32,7 @@ namespace SugarMaMa.API.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
-            _logger = loggerFactory.CreateLogger<AccountController>();
+            _logger = loggerFactory.CreateLogger<AccountsController>();
         }
 
         ////

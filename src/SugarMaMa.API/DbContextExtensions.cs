@@ -287,11 +287,44 @@ namespace SugarMaMa.API
                        },
                         new SpaService
                         {
+                            Name = "Sideburns",
+                            Description = "",
+                            ServiceType = SpaServiceTypes.HairRemoval,
+                            IsQuickService = true,
+                            IsPremium = false,
+                            IsUnisex = true,
+                            Duration = TimeSpan.FromMinutes(15),
+                            Cost = 15
+                        },
+                          new SpaService
+                          {
+                              Name = "Tummy",
+                              Description = "",
+                              ServiceType = SpaServiceTypes.HairRemoval,
+                              IsQuickService = false,
+                              IsPremium = false,
+                              IsUnisex = true,
+                              Duration = TimeSpan.FromMinutes(15),
+                              Cost = 20
+                          },
+                         new SpaService
+                         {
+                             Name = "Tush",
+                             Description = "Butt cheeks",
+                             ServiceType = SpaServiceTypes.HairRemoval,
+                             IsQuickService = false,
+                             IsPremium = false,
+                             IsUnisex = true,
+                             Duration = TimeSpan.FromMinutes(15),
+                             Cost = 25
+                         },
+                        new SpaService
+                        {
                             Name = "Single Tan",
                             Description = "",
                             ServiceType = SpaServiceTypes.Tanning,
                             IsQuickService = false,
-                            IsPremium = true,
+                            IsPremium = false,
                             IsUnisex = true,
                             Duration = TimeSpan.FromMinutes(15),
                             Cost = 35
@@ -302,7 +335,7 @@ namespace SugarMaMa.API
                              Description = "A 30 minute facial that includes an ultrasonic cleanse, exfoliation, and mask. This treatment is perfect for a \"pick me up\" in between stronger treatments or before a big event.",
                              ServiceType = SpaServiceTypes.Facial,
                              IsQuickService = false,
-                             IsPremium = true,
+                             IsPremium = false,
                              IsUnisex = true,
                              Duration = TimeSpan.FromMinutes(30),
                              Cost = 45
@@ -313,7 +346,7 @@ namespace SugarMaMa.API
                             Description = "A 60 minute facial that includes an ultrasonic cleanse, exfoliation, extractions, hot stone massage, and mask. This treatment is designed to deliver maximum results for clean, glowing skin, as well as relaxation.",
                             ServiceType = SpaServiceTypes.Facial,
                             IsQuickService = false,
-                            IsPremium = true,
+                            IsPremium = false,
                             IsUnisex = true,
                             Duration = TimeSpan.FromMinutes(70),
                             Cost = 60
@@ -324,20 +357,121 @@ namespace SugarMaMa.API
                               Description = "This 80 minute facial is our most luxurious. It is designed to induce relaxation, as well as treat all your skin care needs. This treatment begins face-down with a hot stone massage and includes an ultrasonic cleanse, exfoliation, extractions, eye treatment, and galvanic current.",
                               ServiceType = SpaServiceTypes.Facial,
                               IsQuickService = false,
-                              IsPremium = true,
+                              IsPremium = false,
                               IsUnisex = true,
                               Duration = TimeSpan.FromMinutes(80),
                               Cost = 110
                           },
-
-
-
-
-
-
-
-
-
+                           new SpaService
+                           {
+                               Name = "Crystal-Free Diamond-Tip Microdermabrasion",
+                               Description = "This treatment is designed to brighten the skin, leaving it glowing, radiant, and smooth. It can also help soften the look of fine lines. A diamond-tip exfoliation is performed. This is a great anti-aging treatment with no downtime. Not recommended for acne or severe rosacea.",
+                               ServiceType = SpaServiceTypes.Microderm,
+                               IsQuickService = false,
+                               IsPremium = false,
+                               IsUnisex = true,
+                               Duration = TimeSpan.FromMinutes(60),
+                               Cost = 90
+                           },
+                           new SpaService
+                           {
+                               Name = "Micro Express",
+                               Description = "This 30 minute treatment is desgined for anyone on the go looking for rapid results. Treatment includes double-cleanse, 2 passes with diamond tip, and mask.",
+                               ServiceType = SpaServiceTypes.Microderm,
+                               IsQuickService = false,
+                               IsPremium = false,
+                               IsUnisex = true,
+                               Duration = TimeSpan.FromMinutes(30),
+                               Cost = 45
+                           },
+                            new SpaService
+                            {
+                                Name = "Lactic Acid",
+                                Description = "Helps to soften, stimulate, smooth, and exfoliate the skin. Perfect before a big event.  (no peeling)",
+                                ServiceType = SpaServiceTypes.ChemicalPeel,
+                                IsQuickService = false,
+                                IsPremium = false,
+                                IsUnisex = true,
+                                Duration = TimeSpan.FromMinutes(30),
+                                Cost = 55
+                            },
+                              new SpaService
+                              {
+                                  Name = "Glycolic Acid",
+                                  Description = "A workout for your skin. Glycolic is known for its tightening affects.  (no peeling)",
+                                  ServiceType = SpaServiceTypes.ChemicalPeel,
+                                  IsQuickService = false,
+                                  IsPremium = false,
+                                  IsUnisex = true,
+                                  Duration = TimeSpan.FromMinutes(30),
+                                  Cost = 60
+                              },
+                                new SpaService
+                                {
+                                    Name = "Glycolic Acid",
+                                    Description = "A workout for your skin. Glycolic is known for its tightening affects.  (no peeling)",
+                                    ServiceType = SpaServiceTypes.ChemicalPeel,
+                                    IsQuickService = false,
+                                    IsPremium = false,
+                                    IsUnisex = true,
+                                    Duration = TimeSpan.FromMinutes(30),
+                                    Cost = 60
+                                },
+                                 new SpaService
+                                 {
+                                     Name = "Salycilic Acid",
+                                     Description = "Helps to dissolve build-up on skin, kill acne-causing bacteria, as well as lighten hyperpigmentation.  (expect peeling for up to 3-10 days)",
+                                     ServiceType = SpaServiceTypes.ChemicalPeel,
+                                     IsQuickService = false,
+                                     IsPremium = false,
+                                     IsUnisex = true,
+                                     Duration = TimeSpan.FromMinutes(30),
+                                     Cost = 60
+                                 },
+                                  new SpaService
+                                  {
+                                      Name = "Tca",
+                                      Description = "Helps to exfoliate dead skin cells, reduces the appearance of fine lines and wrinkles. Tightens, tones, and smoothes skin texture.  (expect peeling for up to 5-7 days)",
+                                      ServiceType = SpaServiceTypes.ChemicalPeel,
+                                      IsQuickService = false,
+                                      IsPremium = false,
+                                      IsUnisex = true,
+                                      Duration = TimeSpan.FromMinutes(30),
+                                      Cost = 80
+                                  },
+                                   new SpaService
+                                   {
+                                       Name = "Jessner",
+                                       Description = "The big guns... This peel is designed to retexturize skin, smooth scarring, and reduce hyperpigmentation.  (expect peeling and flaking for 7-10 days)",
+                                       ServiceType = SpaServiceTypes.ChemicalPeel,
+                                       IsQuickService = false,
+                                       IsPremium = false,
+                                       IsUnisex = true,
+                                       Duration = TimeSpan.FromMinutes(30),
+                                       Cost = 80
+                                   },
+                                 new SpaService
+                                 {
+                                     Name = "Eyebrow Tinting",
+                                     Description = "",
+                                     ServiceType = SpaServiceTypes.Tinting,
+                                     IsQuickService = false,
+                                     IsPremium = false,
+                                     IsUnisex = true,
+                                     Duration = TimeSpan.FromMinutes(15),
+                                     Cost = 15
+                                 },
+                                  new SpaService
+                                  {
+                                      Name = "Eyelash Tinting",
+                                      Description = "",
+                                      ServiceType = SpaServiceTypes.Tinting,
+                                      IsQuickService = false,
+                                      IsPremium = false,
+                                      IsUnisex = true,
+                                      Duration = TimeSpan.FromMinutes(15),
+                                      Cost = 20
+                                  }
                 );
         }
 

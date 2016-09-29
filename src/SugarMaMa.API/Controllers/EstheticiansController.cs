@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 namespace SugarMaMa.API.Controllers
 {
     [Route("api/[controller]")]
-    public class EstheticianController : Controller
+    public class EstheticiansController : Controller
     {
         private readonly IEstheticianService _estheticians;
 
-        public EstheticianController(IEstheticianService estheticians)
+        public EstheticiansController(IEstheticianService estheticians)
         {
             _estheticians = estheticians;
         }

@@ -71,7 +71,7 @@ namespace SugarMaMa.API
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseOAuthValidation();
-
+            app.UseCors(p => p.AllowAnyOrigin());
             app.UseOpenIdConnectServer(options => {
                 // Create your own authorization provider by subclassing
                 // the OpenIdConnectServerProvider base class.

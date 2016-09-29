@@ -12,14 +12,14 @@ using System.Threading.Tasks;
 namespace SugarMaMa.API.Controllers
 {
     [Route("api/[controller]")]
-    public class ResourceController : Controller
+    public class ResourcesController : Controller
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
         private readonly IRepository<Esthetician, int> _estheticians;
 
-        public ResourceController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IRepository<Esthetician, int> estheticians)
+        public ResourcesController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IRepository<Esthetician, int> estheticians)
         {
             _userManager = userManager;
             _roleManager = roleManager;
