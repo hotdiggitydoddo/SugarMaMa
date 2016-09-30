@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "SugarMaMa-API-7915914b-c10d-40eb-989c-04fc6032c0bc",
   "dependencies": {
     "Microsoft.NETCore.App": {
@@ -25,7 +25,8 @@
     "AspNet.Security.OpenIdConnect.Server": "1.0.0-beta6-final",
     "AspNet.Security.OAuth.Validation": "1.0.0-alpha2-final",
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.0.0",
-    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0"
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
+    "AutoMapper": "5.1.1"
   },
 
   "tools": {

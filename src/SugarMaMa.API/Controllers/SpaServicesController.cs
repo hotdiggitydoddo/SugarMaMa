@@ -19,10 +19,13 @@ namespace SugarMaMa.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(bool byType = false)
         {
             var services = await _spaService.GetAllAsync();
             var spaServices = services as SpaService[] ?? services.ToArray();
+
+            if (!byType)
+                return Ok(spaServices);
 
             var hairRemoval = spaServices.Where(x => x.ServiceType == SpaServiceTypes.HairRemoval);
             var facials = spaServices.Where(x => x.ServiceType == SpaServiceTypes.Facial);

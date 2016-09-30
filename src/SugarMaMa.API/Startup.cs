@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,7 @@ using SugarMaMa.API.DAL.Entities;
 using SugarMaMa.API.DAL;
 using SugarMaMa.API.Services;
 using SugarMaMa.API.DAL.Repositories;
+using SugarMaMa.API.Helpers;
 
 namespace SugarMaMa.API
 {
@@ -50,6 +52,8 @@ namespace SugarMaMa.API
             services.AddTransient<IRepository<SpaService, int>, Repository<SpaService, int>>();
             services.AddTransient<ISpaServicesService, SpaServicesService>();
             services.AddTransient<IEstheticianService, EstheticianService>();
+
+            services.AddSingleton(AutoMapperConfig.Configure());
 
             var connectionString = Configuration["DbConnectionString"]; //Configuration["DbContextSettings:ConnectionString"];
 
@@ -93,8 +97,8 @@ namespace SugarMaMa.API
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment() || env.IsStaging())
-                DbContextExtensions.Seed(app);
+            //if (env.IsDevelopment() || env.IsStaging())
+            //    DbContextExtensions.Seed(app);
 
             app.UseApplicationInsightsRequestTelemetry();
 
