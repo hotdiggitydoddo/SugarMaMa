@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using SugarMaMa.API.Models.SpaServices;
+using SugarMaMa.API.Models.Shifts;
 
 namespace SugarMaMa.API.Models.Estheticians
 {
     public class EstheticianViewModel
     {
         public string FirstName { get; set; }
-        public string LastName { get; set; }
         public List<SpaServiceViewModel> Services { get; set; }
-
+        public List<ShiftViewModel> Shifts { get; set; }
     }
 }

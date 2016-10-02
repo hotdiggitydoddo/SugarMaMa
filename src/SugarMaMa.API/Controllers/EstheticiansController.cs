@@ -34,9 +34,14 @@ namespace SugarMaMa.API.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Esthetician")]
         public async Task<IActionResult> Get()
         {
+            if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                var adminResult = await _estheticians.GetEstheticianMasterListAsync();
+                return Ok(adminResult);
+            }
+
             var result = await _estheticians.GetEstheticiansAsync();
             return Ok(result);
         }

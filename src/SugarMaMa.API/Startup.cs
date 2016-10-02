@@ -50,6 +50,10 @@ namespace SugarMaMa.API
 
             services.AddTransient<IRepository<Esthetician, int>, Repository<Esthetician, int>>();
             services.AddTransient<IRepository<SpaService, int>, Repository<SpaService, int>>();
+            services.AddTransient<IRepository<Shift, Guid>, Repository<Shift, Guid>>();
+            services.AddTransient<IRepository<BusinessDay, int>, Repository<BusinessDay, int>>();
+            services.AddTransient<IRepository<Location, int>, Repository<Location, int>>();
+
             services.AddTransient<ISpaServicesService, SpaServicesService>();
             services.AddTransient<IEstheticianService, EstheticianService>();
 

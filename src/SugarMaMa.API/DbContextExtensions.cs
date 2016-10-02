@@ -39,60 +39,56 @@ namespace SugarMaMa.API
                 AddUsersToRoles(userManager, roleManager);
 
                 AddEstheticians(userManager, roleManager, context);
+                AddShiftsToEstheticians(context);
             }
         }
 
-        private static void AddEstheticians(UserManager<ApplicationUser> users, RoleManager<ApplicationRole> roles, SMDbContext context)
+        private static void AddLocations(SMDbContext context)
         {
-            var esthUser = users.FindByEmailAsync("eve@test.com").Result;
-            var allServices = context.SpaServices.ToList();
-
-            var esthetician = new Esthetician
-            {
-                ApplicationUserId = esthUser.Id,
-                Services = allServices
-            };
-
-            context.Estheticians.Add(esthetician);
-            context.SaveChanges();
+            context.AddRange(
+                new Location
+                {
+                    Address1 = "12362 Beach Blvd",
+                    Address2 = "Suite 19",
+                    City = "Stanton",
+                    State = "CA",
+                    ZipCode = "90680",
+                    BusinessDays = new List<BusinessDay>(),
+                    PhoneNumber = "562.484.8653"
+                },
+                new Location
+                {
+                    Address1 = "451 W. Lambert Rd.",
+                    Address2 = "Suite 207",
+                    City = "Brea",
+                    State = "CA",
+                    ZipCode = "92821",
+                    BusinessDays = new List<BusinessDay>(),
+                    PhoneNumber = "562.484.8653" }
+                );
         }
 
-        private static void AddRoles(RoleManager<ApplicationRole> roleManager)
+        private static void AddBusinessDays(SMDbContext context)
         {
-            Task.FromResult(roleManager.CreateAsync(new ApplicationRole { Name = "Admin" }).Result);
-            Task.FromResult(roleManager.CreateAsync(new ApplicationRole { Name = "Esthetician" }).Result);
-            Task.FromResult(roleManager.CreateAsync(new ApplicationRole { Name = "Client" }).Result);
-        }
+            context.AddRange(
+                // Stanton
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Monday, LocationId = 1 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 7:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Tuesday, LocationId = 1 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Wednesday, LocationId = 1 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Thursday, LocationId = 1 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 09:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Friday, LocationId = 1 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 4:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Saturday, LocationId = 1 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 5:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Sunday, LocationId = 1 },
 
-        private static void AddUsers(UserManager<ApplicationUser> users)
-        {
-            var adminUser = new ApplicationUser
-            {
-                UserName = "admin@test.com",
-                Email = "admin@test.com",
-                FirstName = "Alice",
-                LastName = "Smith"
-            };
-
-            var estheticianUser = new ApplicationUser
-            {
-                UserName = "eve@test.com",
-                Email = "eve@test.com",
-                FirstName = "Eve",
-                LastName = "Smith",
-            };
-
-            Task.FromResult(users.CreateAsync(adminUser, "admin11").Result);
-            Task.FromResult(users.CreateAsync(estheticianUser, "regular11").Result);
-        }
-
-        private static void AddUsersToRoles(UserManager<ApplicationUser> users, RoleManager<ApplicationRole> roleManager)
-        {
-            var admin = users.FindByEmailAsync("admin@test.com").Result;
-            var esthetician = users.FindByEmailAsync("eve@test.com").Result;
-
-            Task.FromResult(users.AddToRolesAsync(admin, new[] { "Admin", "Esthetician" }).Result);
-            Task.FromResult(users.AddToRoleAsync(esthetician, "Esthetician").Result);
+                // Brea
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Monday, LocationId = 2 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 9:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Tuesday, LocationId = 2 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 9:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Wednesday, LocationId = 2 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Thursday, LocationId = 2 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 6:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Friday, LocationId = 2 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 09:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 4:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Saturday, LocationId = 2 },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 4:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Sunday, LocationId = 2 }
+                );
         }
 
         private static void AddSpaServices(SMDbContext context)
@@ -475,23 +471,134 @@ namespace SugarMaMa.API
                 );
         }
 
-        private static void AddBusinessDays(SMDbContext context)
+        private static void AddUsers(UserManager<ApplicationUser> users)
         {
-            context.AddRange(
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 9:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 6:30pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Monday, LocationId = 1 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 7:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Tuesday, LocationId = 1 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 11:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 5:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Monday, LocationId = 2 }
-                );
+            var adminUser = new ApplicationUser
+            {
+                UserName = "admin@test.com",
+                Email = "admin@test.com",
+                FirstName = "Alice",
+                LastName = "Smith"
+            };
+
+            var estheticianUser = new ApplicationUser
+            {
+                UserName = "eve@test.com",
+                Email = "eve@test.com",
+                FirstName = "Eve",
+                LastName = "Smith",
+            };
+
+            Task.FromResult(users.CreateAsync(adminUser, "admin11").Result);
+            Task.FromResult(users.CreateAsync(estheticianUser, "regular11").Result);
         }
 
-        private static void AddLocations(SMDbContext context)
+        private static void AddRoles(RoleManager<ApplicationRole> roleManager)
         {
-            context.AddRange(
-                new Location { Address1 = "12362 Beach Blvd - Suite 19", Address2 = "Stanton, CA 90680", BusinessDays = new List<BusinessDay>(), PhoneNumber = "562.484.8653" },
-                new Location { Address1 = "451 W. Lambert Rd. - Suite 207", Address2 = "Brea, CA 92821", BusinessDays = new List<BusinessDay>(), PhoneNumber = "562.484.8653" }
-                );
+            Task.FromResult(roleManager.CreateAsync(new ApplicationRole { Name = "Admin" }).Result);
+            Task.FromResult(roleManager.CreateAsync(new ApplicationRole { Name = "Esthetician" }).Result);
+            Task.FromResult(roleManager.CreateAsync(new ApplicationRole { Name = "Client" }).Result);
         }
 
-        //private static void Add
+        private static void AddUsersToRoles(UserManager<ApplicationUser> users, RoleManager<ApplicationRole> roleManager)
+        {
+            var admin = users.FindByEmailAsync("admin@test.com").Result;
+            var esthetician = users.FindByEmailAsync("eve@test.com").Result;
+
+            Task.FromResult(users.AddToRolesAsync(admin, new[] { "Admin", "Esthetician" }).Result);
+            Task.FromResult(users.AddToRoleAsync(esthetician, "Esthetician").Result);
+        }
+
+        private static void AddEstheticians(UserManager<ApplicationUser> users, RoleManager<ApplicationRole> roles, SMDbContext context)
+        {
+            var esthUser = users.FindByEmailAsync("eve@test.com").Result;
+            var allServices = context.SpaServices.ToList();
+
+            var esthetician = new Esthetician
+            {
+                ApplicationUserId = esthUser.Id,
+                Services = allServices.OrderBy(x => x.Id).Take(12).ToList(),
+            };
+
+            context.Estheticians.Add(esthetician);
+
+            var nextUser = users.FindByEmailAsync("admin@test.com").Result;
+            var nextEsth = new Esthetician
+            {
+                ApplicationUserId = nextUser.Id,
+                Services = allServices.ToList(),
+            };
+
+            context.Estheticians.Add(nextEsth);
+
+            context.SaveChanges();
+        }
+      
+        private static void AddShiftsToEstheticians(SMDbContext context)
+        {
+            var estheticians = context.Estheticians.ToList();
+            var businessDays = context.BusinessDays.ToList();
+
+            var esth = estheticians.First();
+
+            var shifts = new List<Shift>
+            {
+                new Shift
+                {
+                    EstheticianId = esth.Id,
+                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Monday && x.LocationId == 1).Id,
+                    StartTime = DateTime.Parse("1/1/00 10:00am"),
+                    EndTime = DateTime.Parse("1/1/00 4:00pm")
+                },
+                new Shift
+                {
+                    EstheticianId = esth.Id,
+                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Tuesday && x.LocationId == 1).Id,
+                    StartTime = DateTime.Parse("1/1/00 10:00am"),
+                    EndTime = DateTime.Parse("1/1/00 7:00pm")
+                },
+                new Shift
+                {
+                    EstheticianId = esth.Id,
+                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Wednesday && x.LocationId == 1).Id,
+                    StartTime = DateTime.Parse("1/1/00 12:00pm"),
+                    EndTime = DateTime.Parse("1/1/00 8:00pm")
+                }
+            };
+            esth.Shifts = new List<Shift>();
+            esth.Shifts.AddRange(shifts);
+
+            var nextEsth = estheticians.Last();
+
+            var nextShifts = new List<Shift>
+            {
+                new Shift
+                {
+                    EstheticianId = esth.Id,
+                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Monday && x.LocationId == 1).Id,
+                    StartTime = DateTime.Parse("1/1/00 4:00pm"),
+                    EndTime = DateTime.Parse("1/1/00 8:00pm")
+                },
+                new Shift
+                {
+                    EstheticianId = esth.Id,
+                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Thursday && x.LocationId == 2).Id,
+                    StartTime = DateTime.Parse("1/1/00 10:00am"),
+                    EndTime = DateTime.Parse("1/1/00 8:00pm")
+                },
+                new Shift
+                {
+                    EstheticianId = esth.Id,
+                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Friday && x.LocationId == 2).Id,
+                    StartTime = DateTime.Parse("1/1/00 12:00pm"),
+                    EndTime = DateTime.Parse("1/1/00 6:00pm")
+                }
+            };
+
+            nextEsth.Shifts = new List<Shift>();
+            nextEsth.Shifts.AddRange(nextShifts);
+
+            context.SaveChanges();
+        }
     }
 }

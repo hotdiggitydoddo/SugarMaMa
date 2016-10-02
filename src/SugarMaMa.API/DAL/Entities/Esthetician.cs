@@ -8,5 +8,6 @@ namespace SugarMaMa.API.DAL.Entities
         public Guid ApplicationUserId { get; set; }
         public ApplicationUser User { get; set; }
         public List<SpaService> Services { get; set; }
+        public List<Shift> Shifts { get; set; }
     }
 }
