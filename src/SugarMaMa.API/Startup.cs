@@ -48,15 +48,16 @@ namespace SugarMaMa.API
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            services.AddTransient<IRepository<Esthetician, int>, Repository<Esthetician, int>>();
-            services.AddTransient<IRepository<SpaService, int>, Repository<SpaService, int>>();
-            services.AddTransient<IRepository<Shift, Guid>, Repository<Shift, Guid>>();
-            services.AddTransient<IRepository<BusinessDay, int>, Repository<BusinessDay, int>>();
-            services.AddTransient<IRepository<Location, int>, Repository<Location, int>>();
+            services.AddTransient<IRepository<Esthetician>, Repository<Esthetician>>();
+            services.AddTransient<IRepository<SpaService>, Repository<SpaService>>();
+            services.AddTransient<IRepository<Shift>, Repository<Shift>>();
+            services.AddTransient<IRepository<BusinessDay>, Repository<BusinessDay>>();
+            services.AddTransient<IRepository<Location>, Repository<Location>>();
 
             services.AddTransient<ISpaServicesService, SpaServicesService>();
             services.AddTransient<IEstheticianService, EstheticianService>();
-
+            services.AddTransient<IBusinessDayService, BusinessDayService>();       
+            
             services.AddSingleton(AutoMapperConfig.Configure());
 
             var connectionString = Configuration["DbConnectionString"]; //Configuration["DbContextSettings:ConnectionString"];
@@ -102,7 +103,7 @@ namespace SugarMaMa.API
             loggerFactory.AddDebug();
 
             //if (env.IsDevelopment() || env.IsStaging())
-            //    DbContextExtensions.Seed(app);
+            //   DbContextExtensions.Seed(app);
 
             app.UseApplicationInsightsRequestTelemetry();
 

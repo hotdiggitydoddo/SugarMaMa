@@ -17,9 +17,9 @@ namespace SugarMaMa.API.Controllers
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        private readonly IRepository<Esthetician, int> _estheticians;
+        private readonly IRepository<Esthetician> _estheticians;
 
-        public ResourcesController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IRepository<Esthetician, int> estheticians)
+        public ResourcesController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IRepository<Esthetician> estheticians)
         {
             _userManager = userManager;
             _roleManager = roleManager;

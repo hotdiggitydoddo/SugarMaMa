@@ -9,9 +9,9 @@ namespace SugarMaMa.API.Services
 {
     public class SpaServicesService : ISpaServicesService
     {
-        private readonly IRepository<SpaService, int> _servicesRepository;
+        private readonly IRepository<SpaService> _servicesRepository;
 
-        public SpaServicesService(IRepository<SpaService, int> servicesRepository)
+        public SpaServicesService(IRepository<SpaService> servicesRepository)
         {
             _servicesRepository = servicesRepository;
         }

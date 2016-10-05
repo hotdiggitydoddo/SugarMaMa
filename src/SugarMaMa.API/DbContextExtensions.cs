@@ -70,25 +70,28 @@ namespace SugarMaMa.API
 
         private static void AddBusinessDays(SMDbContext context)
         {
-            context.AddRange(
-                // Stanton
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Monday, LocationId = 1 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 7:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Tuesday, LocationId = 1 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Wednesday, LocationId = 1 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Thursday, LocationId = 1 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 09:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Friday, LocationId = 1 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 4:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Saturday, LocationId = 1 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 5:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Sunday, LocationId = 1 },
+            var locations = context.Locations.ToList();
 
-                // Brea
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Monday, LocationId = 2 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 9:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Tuesday, LocationId = 2 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 9:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Wednesday, LocationId = 2 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Thursday, LocationId = 2 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 6:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Friday, LocationId = 2 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 09:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 4:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Saturday, LocationId = 2 },
-                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 4:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Sunday, LocationId = 2 }
-                );
+            locations[0].BusinessDays.AddRange(new [] {
+                // Stanton
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Monday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 7:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Tuesday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Wednesday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Thursday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 09:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Friday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 4:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Saturday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 5:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Sunday }
+            });
+
+            locations[1].BusinessDays.AddRange(new [] {
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Monday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 9:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Tuesday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 9:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Wednesday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Thursday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 6:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Friday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 09:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 4:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Saturday },
+                new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 4:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Sunday }
+                });
         }
 
         private static void AddSpaServices(SMDbContext context)
@@ -545,22 +548,22 @@ namespace SugarMaMa.API
             {
                 new Shift
                 {
-                    EstheticianId = esth.Id,
-                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Monday && x.LocationId == 1).Id,
+                    Esthetician = esth,
+                    BusinessDay = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Monday && x.LocationId == 1),
                     StartTime = DateTime.Parse("1/1/00 10:00am"),
                     EndTime = DateTime.Parse("1/1/00 4:00pm")
                 },
                 new Shift
                 {
-                    EstheticianId = esth.Id,
-                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Tuesday && x.LocationId == 1).Id,
+                    Esthetician = esth,
+                    BusinessDay = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Tuesday && x.LocationId == 1),
                     StartTime = DateTime.Parse("1/1/00 10:00am"),
                     EndTime = DateTime.Parse("1/1/00 7:00pm")
                 },
                 new Shift
                 {
-                    EstheticianId = esth.Id,
-                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Wednesday && x.LocationId == 1).Id,
+                    Esthetician = esth,
+                    BusinessDay = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Wednesday && x.LocationId == 1),
                     StartTime = DateTime.Parse("1/1/00 12:00pm"),
                     EndTime = DateTime.Parse("1/1/00 8:00pm")
                 }
@@ -574,22 +577,22 @@ namespace SugarMaMa.API
             {
                 new Shift
                 {
-                    EstheticianId = esth.Id,
-                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Monday && x.LocationId == 1).Id,
+                    Esthetician = nextEsth,
+                    BusinessDay = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Monday && x.LocationId == 1),
                     StartTime = DateTime.Parse("1/1/00 4:00pm"),
                     EndTime = DateTime.Parse("1/1/00 8:00pm")
                 },
                 new Shift
                 {
-                    EstheticianId = esth.Id,
-                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Thursday && x.LocationId == 2).Id,
+                    Esthetician = nextEsth,
+                    BusinessDay = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Thursday && x.LocationId == 2),
                     StartTime = DateTime.Parse("1/1/00 10:00am"),
                     EndTime = DateTime.Parse("1/1/00 8:00pm")
                 },
                 new Shift
                 {
-                    EstheticianId = esth.Id,
-                    BusinessDayId = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Friday && x.LocationId == 2).Id,
+                    Esthetician = nextEsth,
+                    BusinessDay = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Friday && x.LocationId == 2),
                     StartTime = DateTime.Parse("1/1/00 12:00pm"),
                     EndTime = DateTime.Parse("1/1/00 6:00pm")
                 }

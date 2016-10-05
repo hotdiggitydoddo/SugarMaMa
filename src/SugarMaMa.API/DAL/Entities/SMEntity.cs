@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace SugarMaMa.API.DAL.Entities
 {
-    public class SMEntity<T>
+    public class SMEntity
     {
-        public T Id { get; set; }
+        public int Id { get; set; }
     }
 }

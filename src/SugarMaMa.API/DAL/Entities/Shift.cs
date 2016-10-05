@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SugarMaMa.API.DAL.Entities
 {
-    public class Shift : SMEntity<Guid>
+    public class Shift : SMEntity
     {
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

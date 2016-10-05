@@ -6,7 +6,7 @@ using AspNet.Security.OAuth.Validation;
 
 namespace SugarMaMa.API.DAL.Entities
 {
-    public class Appointment : SMEntity<Guid>
+    public class Appointment : SMEntity
     {
         public List<SpaService> Services { get; set; }
         public DateTime StartTime { get; set; }

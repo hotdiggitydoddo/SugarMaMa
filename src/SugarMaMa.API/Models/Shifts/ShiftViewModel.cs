@@ -12,6 +12,5 @@ namespace SugarMaMa.API.Models.Shifts
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public BusinessDayViewModel BusinessDay { get; set; }
-        public EstheticianViewModel Esthetician { get; set; }
     }
 }

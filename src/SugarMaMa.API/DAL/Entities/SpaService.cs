@@ -2,7 +2,7 @@
 
 namespace SugarMaMa.API.DAL.Entities
 {
-    public class SpaService : SMEntity<int>
+    public class SpaService : SMEntity
     {
         public string Name { get; set; }
         public string Description { get; set; }
