@@ -13,6 +13,5 @@ namespace SugarMaMa.API.DAL.Entities
         public Esthetician Esthetician { get; set; }
         public int BusinessDayId { get; set; }
         public BusinessDay BusinessDay { get; set; }
-        public List<Appointment> Appointments { get; set; }
     }
 }

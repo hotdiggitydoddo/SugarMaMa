@@ -48,7 +48,7 @@ namespace SugarMaMa.API.DAL.Repositories
             IQueryable<T> query = _db.Set<T>();
 
             foreach (var property in includes)
-                query.Include(property);
+                query = query.Include(property);
 
             return await query.SingleOrDefaultAsync(x => x.Id == id);
         }

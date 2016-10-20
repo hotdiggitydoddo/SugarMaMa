@@ -106,6 +106,8 @@ namespace SugarMaMa.API
                     OpenIdConnectConstants.Destinations.AccessToken,
                     OpenIdConnectConstants.Destinations.IdentityToken);
 
+                identity.AddClaim("firstName", user.FirstName, OpenIdConnectConstants.Destinations.IdentityToken);
+
                 //Add roles
                 var roles = await manager.GetRolesAsync(user);
                 var roleClaims = new List<Claim>();
@@ -126,11 +128,12 @@ namespace SugarMaMa.API
                 ticket.SetScopes(
                     /* openid: */ OpenIdConnectConstants.Scopes.OpenId,
                     /* email: */ OpenIdConnectConstants.Scopes.Email,
+                    
                     /* profile: */ OpenIdConnectConstants.Scopes.Profile,
                     /* offline_access */ OpenIdConnectConstants.Scopes.OfflineAccess);
                 // Set the resource servers the access token should be issued for.
                 ticket.SetResources("resource_server");
-
+                
                 context.Validate(ticket);
             }
         }

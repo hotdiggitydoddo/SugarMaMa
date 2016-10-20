@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SugarMaMa.API.DAL.Entities;
 using SugarMaMa.API.DAL.Repositories;
+using SugarMaMa.API.Models.BusinessDays;
 using SugarMaMa.API.Models.Estheticians;
 using SugarMaMa.API.Models.SpaServices;
 using SugarMaMa.API.Models.Shifts;
@@ -47,8 +49,30 @@ namespace SugarMaMa.API.Services
                     {
                         FirstName = esthetician.User.FirstName,
                         Services = _mapper.Map<List<SpaServiceViewModel>>(esthetician.Services),
-                        Shifts = _mapper.Map<List<ShiftViewModel>>(shifts)
+                        Shifts = new List<ShiftViewModel>(),
+                        Id = esthetician.Id
                     };
+
+                    foreach (var shift in shifts)
+                    {
+                        toAdd.Shifts.Add(new ShiftViewModel
+                        {
+                            StartTime = shift.StartTime,
+                            EndTime = shift.EndTime,
+                            BusinessDay = new BusinessDayViewModel
+                            {
+                                ClosingTime = shift.BusinessDay.ClosingTime,
+                                OpeningTime = shift.BusinessDay.OpeningTime,
+                                DayOfWeek = shift.BusinessDay.DayOfWeek,
+                                Id = shift.BusinessDay.Id,
+                                Location = new LocationViewModel
+                                {
+                                    Id = shift.BusinessDay.Location.Id,
+                                    City = shift.BusinessDay.Location.City
+                                }
+                            }
+                        });
+                    }
                     list.Add(toAdd);
                 } 
                 catch(TaskCanceledException e)
@@ -56,26 +80,6 @@ namespace SugarMaMa.API.Services
                     var a = e;
                 }
             }
-
-                // foreach (var shift in shifts)
-                // {
-                //     var businessDay = await _businessDays.FindAsync(x => x.Id == shift.BusinessDayId, x => x.Location);
-
-                //     toAdd.Shifts.Add(new ShiftViewModel
-                //     {
-                //         StartTime = shift.StartTime,
-                //         EndTime = shift.EndTime,
-                //         BusinessDay = _mapper.Map<BusinessDayViewModel>(businessDay.ToList()[0])
-                //     });
-                // }
-
-                //foreach (var service in esthetician.Services)
-                //    toAdd.Services.Add(new SpaServiceViewModel { Id = service.Id, Name = service.Name });
-
-                //foreach (var shift in esthetician.Shifts)
-                //{
-                //    toAdd.Shifts.Add(new ShiftViewModel {  BusinessDay = new BusinessDayViewModel {  } })
-                //}
             return list;
         }
 
@@ -88,9 +92,11 @@ namespace SugarMaMa.API.Services
             {
                 var toAdd = new EstheticianAdminViewModel
                 {
+                    Id = esthetician.Id,
                     FirstName = esthetician.User.FirstName,
                     LastName = esthetician.User.LastName,
-                    Services = new List<SpaServiceViewModel>()
+                    Services = new List<SpaServiceViewModel>(),
+                    Color = esthetician.Color
                 };
 
                 foreach (var service in esthetician.Services)

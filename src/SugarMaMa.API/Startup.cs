@@ -42,6 +42,7 @@ namespace SugarMaMa.API
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
             services.AddAuthentication();
+            services.AddCors();
             services.AddMvc();
 
             // Add application services.
@@ -53,10 +54,14 @@ namespace SugarMaMa.API
             services.AddTransient<IRepository<Shift>, Repository<Shift>>();
             services.AddTransient<IRepository<BusinessDay>, Repository<BusinessDay>>();
             services.AddTransient<IRepository<Location>, Repository<Location>>();
+            services.AddTransient<IRepository<Appointment>, Repository<Appointment>>();
+            services.AddTransient<IRepository<Client>, Repository<Client>>();
 
             services.AddTransient<ISpaServicesService, SpaServicesService>();
             services.AddTransient<IEstheticianService, EstheticianService>();
-            services.AddTransient<IBusinessDayService, BusinessDayService>();       
+            services.AddTransient<IBusinessDayService, BusinessDayService>();
+            services.AddTransient<ILocationService, LocationService>();
+            services.AddTransient<IAppointmentService, AppointmentService>();       
             
             services.AddSingleton(AutoMapperConfig.Configure());
 
@@ -80,12 +85,14 @@ namespace SugarMaMa.API
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseOAuthValidation();
-            app.UseCors(p => p.AllowAnyOrigin());
+            app.UseCors(p => p.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().AllowCredentials());
             app.UseOpenIdConnectServer(options => {
                 // Create your own authorization provider by subclassing
                 // the OpenIdConnectServerProvider base class.
                 options.Provider = new AuthorizationProvider();
-
+                options.IdentityTokenLifetime = TimeSpan.FromDays(1460);
+                options.AccessTokenLifetime = TimeSpan.FromDays(1460);
+                
                 // Enable the authorization and token endpoints.
                 options.AuthorizationEndpointPath = "/api/authorize";
                 options.TokenEndpointPath = "/api/token";
@@ -102,8 +109,8 @@ namespace SugarMaMa.API
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            //if (env.IsDevelopment() || env.IsStaging())
-            //   DbContextExtensions.Seed(app);
+            if (env.IsDevelopment() || env.IsStaging())
+               DbContextExtensions.Seed(app);
 
             app.UseApplicationInsightsRequestTelemetry();
 

@@ -15,6 +15,7 @@ namespace SugarMaMa.API.DAL
         public DbSet<BusinessDay> BusinessDays { get; set; }
         public DbSet<ShiftTemplate> ShiftTemplates { get; set; }
         public DbSet<Shift> Shifts { get; set; }
+        public DbSet<Client> Clients { get; set; }
 
         public SMDbContext(DbContextOptions<SMDbContext> options)
            : base(options)

@@ -40,7 +40,54 @@ namespace SugarMaMa.API
 
                 AddEstheticians(userManager, roleManager, context);
                 AddShiftsToEstheticians(context);
+
+                AddAppointments(context, userManager);
             }
+        }
+
+        private static void AddAppointments(SMDbContext context, UserManager<ApplicationUser> userManager)
+        {
+            var esth = context.Estheticians.Single(x => x.Id == 1);
+            var services = context.SpaServices.Take(3).ToList();
+            var clientUser = new ApplicationUser
+            {
+                UserName = "client@test.com",
+                Email = "client@test.com",
+                FirstName = "Claire",
+                LastName = "Smith",
+                PhoneNumber = "5625551212"
+            };
+
+            Task.FromResult(userManager.CreateAsync(clientUser, "client11").Result);
+
+            var client = new Client
+            {
+                ApplicationUserId = userManager.FindByEmailAsync("client@test.com").Result.Id,
+                AppointmentRemindersViaText = true,
+                Appointments = new List<Appointment>()
+            };
+            context.Clients.Add(client);
+            context.SaveChanges();
+
+            var appt = new Appointment
+            {
+                ClientId  = client.Id,
+                FirstName = clientUser.FirstName,
+                LastName = clientUser.LastName,
+                Email = clientUser.Email,
+                PhoneNumber = clientUser.PhoneNumber,
+                Services = services,
+                Esthetician = esth,
+                StartTime = DateTime.Now.AddHours(-5),
+                LocationId = 1,
+                EndTime = DateTime.Now.AddHours(-2),
+                RemindViaEmail = client.AppointmentRemindersViaEmail,
+                RemindViaText = client.AppointmentRemindersViaText,
+                Gender = Gender.Male
+            };
+
+            context.Appointments.Add(appt);
+            context.SaveChanges();
         }
 
         private static void AddLocations(SMDbContext context)
@@ -405,17 +452,7 @@ namespace SugarMaMa.API
                                   Duration = TimeSpan.FromMinutes(30),
                                   Cost = 60
                               },
-                                new SpaService
-                                {
-                                    Name = "Glycolic Acid",
-                                    Description = "A workout for your skin. Glycolic is known for its tightening affects.  (no peeling)",
-                                    ServiceType = SpaServiceTypes.ChemicalPeel,
-                                    IsQuickService = false,
-                                    IsPremium = false,
-                                    IsUnisex = true,
-                                    Duration = TimeSpan.FromMinutes(30),
-                                    Cost = 60
-                                },
+                              
                                  new SpaService
                                  {
                                      Name = "Salycilic Acid",
@@ -521,6 +558,7 @@ namespace SugarMaMa.API
             {
                 ApplicationUserId = esthUser.Id,
                 Services = allServices.OrderBy(x => x.Id).Take(12).ToList(),
+                Color = "33cc33"
             };
 
             context.Estheticians.Add(esthetician);
@@ -530,6 +568,7 @@ namespace SugarMaMa.API
             {
                 ApplicationUserId = nextUser.Id,
                 Services = allServices.ToList(),
+                Color = "cc33ff"
             };
 
             context.Estheticians.Add(nextEsth);
@@ -549,7 +588,7 @@ namespace SugarMaMa.API
                 new Shift
                 {
                     Esthetician = esth,
-                    BusinessDay = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Monday && x.LocationId == 1),
+                    BusinessDay = businessDays.Single(x => x.DayOfWeek == DayOfWeek.Monday && x.LocationId == 2),
                     StartTime = DateTime.Parse("1/1/00 10:00am"),
                     EndTime = DateTime.Parse("1/1/00 4:00pm")
                 },

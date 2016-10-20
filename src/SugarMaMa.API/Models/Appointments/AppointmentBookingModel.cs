@@ -38,5 +38,11 @@ namespace SugarMaMa.API.Models.Appointments
 
         [Required, Phone]
         public string PhoneNumber { get; set; }
+
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
+        public bool ReminderViaText { get; set; }
+        public bool ReminderViaEmail { get; set; }
+        public int SelectedLocationId { get; set; }
     }
 }

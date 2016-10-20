@@ -6,6 +6,7 @@ namespace SugarMaMa.API.Models.Estheticians
 {
     public class EstheticianViewModel
     {
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public List<SpaServiceViewModel> Services { get; set; }
         public List<ShiftViewModel> Shifts { get; set; }
