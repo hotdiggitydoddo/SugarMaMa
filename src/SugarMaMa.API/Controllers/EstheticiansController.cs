@@ -48,9 +48,10 @@ namespace SugarMaMa.API.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            return "value";
+            var result = await _estheticians.GetByIdAsync(id);
+            return Ok(result);
         }
 
         // POST api/values

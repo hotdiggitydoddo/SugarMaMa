@@ -1,4 +1,5 @@
 ﻿using System;
+using AspNet.Security.OpenIdConnect.Server;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -84,6 +85,7 @@ namespace SugarMaMa.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            
             app.UseOAuthValidation();
             app.UseCors(p => p.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().AllowCredentials());
             app.UseOpenIdConnectServer(options => {
@@ -99,8 +101,9 @@ namespace SugarMaMa.API
 
                 // During development, you can set AllowInsecureHttp
                 // to true to disable the HTTPS requirement.
-                if (env.IsDevelopment())
-                    options.AllowInsecureHttp = true;
+
+                //if (env.IsDevelopment())
+                options.AllowInsecureHttp = true;
 
                 // Note: uncomment this line to issue JWT tokens.
                 // options.AccessTokenHandler = new JwtSecurityTokenHandler();

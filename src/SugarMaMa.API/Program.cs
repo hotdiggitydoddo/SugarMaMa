@@ -13,7 +13,10 @@ namespace SugarMaMa.API
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()
-                .UseKestrel()
+                .UseKestrel(o =>
+                {
+                    //o.UseConnectionLogging();
+                })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

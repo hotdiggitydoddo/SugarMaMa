@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -63,7 +65,7 @@ namespace SugarMaMa.API.Services
                             {
                                 ClosingTime = shift.BusinessDay.ClosingTime,
                                 OpeningTime = shift.BusinessDay.OpeningTime,
-                                DayOfWeek = shift.BusinessDay.DayOfWeek,
+                                DayOfWeek = shift.BusinessDay.DayOfWeek.ToString("G"),
                                 Id = shift.BusinessDay.Id,
                                 Location = new LocationViewModel
                                 {
@@ -108,6 +110,50 @@ namespace SugarMaMa.API.Services
             return list;
         }
 
+        public async Task<EstheticianAdminViewModel> GetByIdAsync(int id)
+        {
+            var esthetician = await _estheticians.GetByIdAsync(id, x => x.User, x => x.Services, x => x.Shifts);
+            var businessDays =
+                _businessDays.FindAsync(x => esthetician.Shifts.Select(s => s.BusinessDayId).Contains(x.Id));
+
+            var retVal = new EstheticianAdminViewModel
+            {
+                Id = esthetician.Id,
+                FirstName = esthetician.User.FirstName,
+                LastName = esthetician.User.LastName,
+                Services = new List<SpaServiceViewModel>(),
+                Color = esthetician.Color,
+                Shifts = new List<ShiftViewModel>()
+            };
+
+            foreach (var service in esthetician.Services)
+                retVal.Services.Add(new SpaServiceViewModel { Id = service.Id, Name = service.Name });
+
+            var bdList = await businessDays;
+
+            foreach (var shift in esthetician.Shifts)
+            {
+                var bd = bdList.Single(x => x.Id == shift.BusinessDayId);
+
+                retVal.Shifts.Add(new ShiftViewModel
+                {
+                    StartTime = shift.StartTime,
+                    EndTime = shift.EndTime,
+                    BusinessDay = new BusinessDayViewModel
+                    {
+                        OpeningTime = bd.OpeningTime,
+                        ClosingTime = bd.ClosingTime,
+                        Location = new LocationViewModel
+                        {
+                            Id = bd.LocationId,
+                            City = bd.LocationId == 1 ? "Stanton" : "Brea"
+                        }
+                    }
+                });
+            }
+            return retVal;
+        }
+
         public async Task<Esthetician> AddEstheticianAsync(AddEstheticianViewModel model)
         {
             var user = _mapper.Map<ApplicationUser>(model);
@@ -126,12 +172,76 @@ namespace SugarMaMa.API.Services
             var roleResult = _userManager.AddToRoleAsync(user, "Esthetician").Result;
             return _estheticians.AddAsync(esth).Result;
         }
+
+        public async Task<ShiftViewModel> GetShiftById(int id)
+        {
+            var shift = await _shifts.GetByIdAsync(id, x => x.BusinessDay, x => x.BusinessDay.Location);
+
+            return new ShiftViewModel
+            {
+                StartTime = shift.StartTime,
+                EndTime = shift.EndTime,
+                BusinessDay = new BusinessDayViewModel
+                {
+                    Id = shift.BusinessDayId,
+                    DayOfWeek = shift.BusinessDay.DayOfWeek.ToString("G"),
+                    OpeningTime = shift.BusinessDay.OpeningTime,
+                    ClosingTime = shift.BusinessDay.ClosingTime,
+                    Location = new LocationViewModel
+                    {
+                        Id = shift.BusinessDay.LocationId,
+                        Address1 = shift.BusinessDay.Location.Address1,
+                        Address2 = shift.BusinessDay.Location.Address2,
+                        City = shift.BusinessDay.Location.City,
+                        State = shift.BusinessDay.Location.State,
+                        ZipCode = shift.BusinessDay.Location.ZipCode,
+                        PhoneNumber = shift.BusinessDay.Location.PhoneNumber
+                    }
+                }
+            };
+        }
+
+        public async Task<List<ShiftViewModel>> GetShiftsByEstheticianId(int id)
+        {
+            var list = await _shifts.FindAsync(x => x.EstheticianId == id, x => x.BusinessDay, x => x.BusinessDay.Location);
+            var shifts = new List<ShiftViewModel>();
+
+            foreach (var shift in list)
+            {
+                shifts.Add(new ShiftViewModel
+                {
+                    StartTime = shift.StartTime,
+                    EndTime = shift.EndTime,
+                    BusinessDay = new BusinessDayViewModel
+                    {
+                        Id = shift.BusinessDayId,
+                        DayOfWeek =  shift.BusinessDay.DayOfWeek.ToString("G"),
+                        OpeningTime = shift.BusinessDay.OpeningTime,
+                        ClosingTime = shift.BusinessDay.ClosingTime,
+                        Location = new LocationViewModel
+                        {
+                            Id = shift.BusinessDay.LocationId,
+                            Address1 = shift.BusinessDay.Location.Address1,
+                            Address2 = shift.BusinessDay.Location.Address2,
+                            City = shift.BusinessDay.Location.City,
+                            State = shift.BusinessDay.Location.State,
+                            ZipCode = shift.BusinessDay.Location.ZipCode,
+                            PhoneNumber = shift.BusinessDay.Location.PhoneNumber
+                        }
+                    }
+                });    
+            }
+            return shifts;
+        }
     }
 
     public interface IEstheticianService
     {
         Task<List<EstheticianAdminViewModel>> GetEstheticianMasterListAsync();
         Task<List<EstheticianViewModel>> GetEstheticiansAsync();
+        Task<EstheticianAdminViewModel> GetByIdAsync(int id);
         Task<Esthetician> AddEstheticianAsync(AddEstheticianViewModel model);
+        Task<ShiftViewModel> GetShiftById(int id);
+        Task<List<ShiftViewModel>> GetShiftsByEstheticianId(int id);
     }
 }

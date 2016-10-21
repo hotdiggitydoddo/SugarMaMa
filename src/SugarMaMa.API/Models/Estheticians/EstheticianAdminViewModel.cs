@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SugarMaMa.API.Models.Shifts;
 
 namespace SugarMaMa.API.Models.Estheticians
 {
@@ -15,5 +16,6 @@ namespace SugarMaMa.API.Models.Estheticians
         public string Email { get; set; }
         public string Color { get; set; }
         public List<SpaServiceViewModel> Services { get; set; }
+        public List<ShiftViewModel> Shifts { get; set; }
     }
 }

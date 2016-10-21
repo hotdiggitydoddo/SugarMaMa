@@ -30,7 +30,7 @@ namespace SugarMaMa.API.Services
                     Id = x.Id,
                     ClosingTime = x.ClosingTime,
                     OpeningTime = x.OpeningTime,
-                    DayOfWeek = x.DayOfWeek,
+                    DayOfWeek = x.DayOfWeek.ToString("G"),
                 });
 
                 list.Add(new LocationViewModel
