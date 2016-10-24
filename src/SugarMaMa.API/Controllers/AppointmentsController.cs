@@ -114,7 +114,7 @@ namespace SugarMaMa.API.Controllers
         public string FirstName { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-
+        public DateTime Date { get; set; }
         public DateTime Start { get; set; }// = DateTime.SpecifyKind(task.Start, DateTimeKind.Utc),
         public DateTime End { get; set; }// = DateTime.SpecifyKind(task.Start, DateTimeKind.Utc),
         public string StartTimezone { get; set; }

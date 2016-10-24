@@ -78,9 +78,9 @@ namespace SugarMaMa.API
                 PhoneNumber = clientUser.PhoneNumber,
                 Services = services,
                 Esthetician = esth,
-                StartTime = DateTime.Now.AddHours(-5),
+                StartTime = DateTime.Parse("10/21/2016 17:15"),
                 LocationId = 1,
-                EndTime = DateTime.Now.AddHours(-2),
+                EndTime = DateTime.Parse("10/21/2016 18:30"),
                 RemindViaEmail = client.AppointmentRemindersViaEmail,
                 RemindViaText = client.AppointmentRemindersViaText,
                 Gender = Gender.Male
