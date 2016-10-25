@@ -71,7 +71,7 @@ namespace SugarMaMa.API
 
             var appt = new Appointment
             {
-                ClientId  = client.Id,
+                ClientId = client.Id,
                 FirstName = clientUser.FirstName,
                 LastName = clientUser.LastName,
                 Email = clientUser.Email,
@@ -111,7 +111,8 @@ namespace SugarMaMa.API
                     State = "CA",
                     ZipCode = "92821",
                     BusinessDays = new List<BusinessDay>(),
-                    PhoneNumber = "562.484.8653" }
+                    PhoneNumber = "562.484.8653"
+                }
                 );
         }
 
@@ -119,7 +120,7 @@ namespace SugarMaMa.API
         {
             var locations = context.Locations.ToList();
 
-            locations[0].BusinessDays.AddRange(new [] {
+            locations[0].BusinessDays.AddRange(new[] {
                 // Stanton
                 new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Monday },
                 new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 7:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Tuesday },
@@ -130,7 +131,7 @@ namespace SugarMaMa.API
                 new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 12:00pm").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 5:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Sunday }
             });
 
-            locations[1].BusinessDays.AddRange(new [] {
+            locations[1].BusinessDays.AddRange(new[] {
                 new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 10:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Monday },
                 new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 9:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Tuesday },
                 new BusinessDay { OpeningTime = DateTime.Parse("1/1/00 9:00am").ToUniversalTime(), ClosingTime = DateTime.Parse("1/1/00 8:00pm").ToUniversalTime(), DayOfWeek = DayOfWeek.Wednesday },
@@ -452,7 +453,7 @@ namespace SugarMaMa.API
                                   Duration = TimeSpan.FromMinutes(30),
                                   Cost = 60
                               },
-                              
+
                                  new SpaService
                                  {
                                      Name = "Salycilic Acid",
@@ -518,7 +519,8 @@ namespace SugarMaMa.API
                 UserName = "admin@test.com",
                 Email = "admin@test.com",
                 FirstName = "Alice",
-                LastName = "Smith"
+                LastName = "Smith",
+                PhoneNumber = "6265551212"
             };
 
             var estheticianUser = new ApplicationUser
@@ -527,6 +529,7 @@ namespace SugarMaMa.API
                 Email = "eve@test.com",
                 FirstName = "Eve",
                 LastName = "Smith",
+                PhoneNumber = "7147775555"
             };
 
             Task.FromResult(users.CreateAsync(adminUser, "admin11").Result);
@@ -575,7 +578,7 @@ namespace SugarMaMa.API
 
             context.SaveChanges();
         }
-      
+
         private static void AddShiftsToEstheticians(SMDbContext context)
         {
             var estheticians = context.Estheticians.ToList();

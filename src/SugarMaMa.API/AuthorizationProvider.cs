@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using SugarMaMa.API.Services;
 
 namespace SugarMaMa.API
 {
@@ -117,6 +118,15 @@ namespace SugarMaMa.API
                     OpenIdConnectConstants.Destinations.IdentityToken);
                 }
 
+                var estheticians = (IEstheticianService)context.HttpContext.RequestServices.GetService(typeof(IEstheticianService));
+
+                var esthetician = await estheticians.GetByEmailAsync(user.Email);
+
+                if (esthetician != null)
+                {
+                   identity.AddClaim("estheticianId", esthetician.Id.ToString(), OpenIdConnectConstants.Destinations.AccessToken,
+                   OpenIdConnectConstants.Destinations.IdentityToken);
+                }
 
                 // Create a new authentication ticket holding the user identity.
                 var ticket = new AuthenticationTicket(

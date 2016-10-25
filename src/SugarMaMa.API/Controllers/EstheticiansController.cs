@@ -54,6 +54,28 @@ namespace SugarMaMa.API.Controllers
             return Ok(result);
         }
 
+        [Route("profile")]
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            if (User.Identity.IsAuthenticated && User.HasClaim(x => x.Type == "estheticianId"))
+            {
+                var adminResult = await _estheticians.GetByIdAsync(int.Parse(User.FindFirst("estheticianId").Value));
+                return Ok(adminResult);
+            }
+            return new UnauthorizedResult();
+        }
+
+       
+
+        [HttpGet("{email}")]
+        public async Task<IActionResult> GetByEmail(string email)
+        {
+            var result = await _estheticians.GetByEmailAsync(email);
+            return Ok(result);
+        }
+
         // POST api/values
         //[HttpPost]
         //public void Post([FromBody]string value)

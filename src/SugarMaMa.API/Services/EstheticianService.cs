@@ -121,6 +121,8 @@ namespace SugarMaMa.API.Services
                 Id = esthetician.Id,
                 FirstName = esthetician.User.FirstName,
                 LastName = esthetician.User.LastName,
+                Email = esthetician.User.Email,
+                PhoneNumber = esthetician.User.PhoneNumber,
                 Services = new List<SpaServiceViewModel>(),
                 Color = esthetician.Color,
                 Shifts = new List<ShiftViewModel>()
@@ -233,6 +235,12 @@ namespace SugarMaMa.API.Services
             }
             return shifts;
         }
+
+        public async Task<Esthetician> GetByEmailAsync(string email)
+        {
+            var result = (await _estheticians.FindAsync(x => x.User.Email == email, x => x.User)).ToList();
+            return result.Any() ? result[0] : null;
+        }
     }
 
     public interface IEstheticianService
@@ -243,5 +251,6 @@ namespace SugarMaMa.API.Services
         Task<Esthetician> AddEstheticianAsync(AddEstheticianViewModel model);
         Task<ShiftViewModel> GetShiftById(int id);
         Task<List<ShiftViewModel>> GetShiftsByEstheticianId(int id);
+        Task<Esthetician> GetByEmailAsync(string email);
     }
 }
