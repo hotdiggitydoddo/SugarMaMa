@@ -17,10 +17,12 @@ namespace SugarMaMa.API.Controllers
     public class EstheticiansController : Controller
     {
         private readonly IEstheticianService _estheticians;
+        private readonly IAppointmentService _appointments;
      
-        public EstheticiansController(IEstheticianService estheticians)
+        public EstheticiansController(IEstheticianService estheticians, IAppointmentService appointments)
         {
             _estheticians = estheticians;
+            _appointments = appointments;
         }
 
         [HttpPost]
@@ -67,7 +69,20 @@ namespace SugarMaMa.API.Controllers
             return new UnauthorizedResult();
         }
 
-       
+        [Route("appointments")]
+        [Authorize]
+        [HttpGet]
+
+        public async Task<IActionResult> Appointments(int id)
+        {
+            var result = await _appointments.GetAppointmentsByEstheticianId(id);
+            foreach (var appointment in result)
+            {
+                appointment.StartTime = appointment.StartTime.ToLocalTime();
+                appointment.EndTime = appointment.EndTime.ToLocalTime();
+            }
+            return Ok(result);
+        }
 
         [HttpGet("{email}")]
         public async Task<IActionResult> GetByEmail(string email)

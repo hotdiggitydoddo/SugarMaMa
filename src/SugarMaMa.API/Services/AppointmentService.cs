@@ -134,6 +134,12 @@ namespace SugarMaMa.API.Services
 
             return await _appointments.UpdateAsync(existing) ? existing : null;
         }
+
+        public async Task<List<Appointment>> GetAppointmentsByEstheticianId(int estheticianId)
+        {
+            var appts =  await _appointments.FindAsync(x => x.EstheticianId == estheticianId, x => x.Services,  x => x.Location);
+            return appts.ToList();
+        }
     }
 
     public interface IAppointmentService
@@ -141,5 +147,6 @@ namespace SugarMaMa.API.Services
         Task<List<Appointment>> GetAppointmentsAsync();
         Task<Appointment> BookAppointmentAsync(AppointmentBookingModel model);
         Task<Appointment> UpdateAppointmentAsync(AppointmentModel model);
+        Task<List<Appointment>> GetAppointmentsByEstheticianId(int estheticianId);
     }
 }
