@@ -135,9 +135,13 @@ namespace SugarMaMa.API.Services
             return await _appointments.UpdateAsync(existing) ? existing : null;
         }
 
-        public async Task<List<Appointment>> GetAppointmentsByEstheticianId(int estheticianId)
+        public async Task<List<Appointment>> GetAppointmentsByEstheticianId(int estheticianId, bool all = false)
         {
-            var appts =  await _appointments.FindAsync(x => x.EstheticianId == estheticianId, x => x.Services,  x => x.Location);
+            var appts = all
+                ? await _appointments.FindAsync(x => x.EstheticianId == estheticianId, x => x.Services, x => x.Location)
+                : await
+                    _appointments.FindAsync(x => x.EstheticianId == estheticianId && x.StartTime > DateTime.UtcNow,
+                        x => x.Services, x => x.Location);
             return appts.ToList();
         }
     }
@@ -147,6 +151,6 @@ namespace SugarMaMa.API.Services
         Task<List<Appointment>> GetAppointmentsAsync();
         Task<Appointment> BookAppointmentAsync(AppointmentBookingModel model);
         Task<Appointment> UpdateAppointmentAsync(AppointmentModel model);
-        Task<List<Appointment>> GetAppointmentsByEstheticianId(int estheticianId);
+        Task<List<Appointment>> GetAppointmentsByEstheticianId(int estheticianId, bool all = false);
     }
 }

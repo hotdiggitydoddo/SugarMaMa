@@ -348,6 +348,17 @@ namespace SugarMaMa.API.Controllers
             return Ok(new { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
+        [HttpPut]
+        [Route("Password")]
+        public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            var idResult = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            if (idResult.Succeeded)
+                return new OkObjectResult("Password successfully changed.");
+            return new BadRequestObjectResult(idResult.Errors);
+        }
+
         ////
         //// POST: /Account/SendCode
         //[HttpPost]

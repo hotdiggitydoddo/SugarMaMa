@@ -69,6 +69,29 @@ namespace SugarMaMa.API.Controllers
             return new UnauthorizedResult();
         }
 
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody]EstheticianAdminViewModel esthetician)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return null;
+            }
+            if (User.IsInRole("Esthetician"))
+            {
+                var result = await _estheticians.UpdateInfo(esthetician.Id, esthetician.Email, esthetician.PhoneNumber);
+                if (result == null)
+                    return new StatusCodeResult(500);
+
+                //if (!string.IsNullOrWhiteSpace(esthetician.Email))
+                //{
+                //    var claim = User.FindFirst("email");
+                //}
+                return Ok(result);
+            }
+            return new UnauthorizedResult();
+        }
+
         [Route("appointments")]
         [Authorize]
         [HttpGet]

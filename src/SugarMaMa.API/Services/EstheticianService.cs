@@ -240,6 +240,20 @@ namespace SugarMaMa.API.Services
         {
             var result = (await _estheticians.FindAsync(x => x.User.Email == email, x => x.User)).ToList();
             return result.Any() ? result[0] : null;
+            
+        }
+
+        public async Task<EstheticianAdminViewModel> UpdateInfo(int id, string email, string phoneNumber)
+        {
+            var esthInDb = await _estheticians.GetByIdAsync(id, x => x.User);
+
+            esthInDb.User.Email = email;
+            esthInDb.User.PhoneNumber = phoneNumber;
+
+            var task = await _estheticians.UpdateAsync(esthInDb) ? GetByIdAsync(esthInDb.Id) : null;
+            if (task != null)
+                return await task;
+            return null;
         }
     }
 
@@ -252,5 +266,6 @@ namespace SugarMaMa.API.Services
         Task<ShiftViewModel> GetShiftById(int id);
         Task<List<ShiftViewModel>> GetShiftsByEstheticianId(int id);
         Task<Esthetician> GetByEmailAsync(string email);
+        Task<EstheticianAdminViewModel> UpdateInfo(int id, string email, string phoneNumber);
     }
 }
