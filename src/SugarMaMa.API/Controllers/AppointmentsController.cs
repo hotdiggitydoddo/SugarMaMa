@@ -23,10 +23,11 @@ namespace SugarMaMa.API.Controllers
     public class AppointmentsController : Controller
     {
         private readonly IAppointmentService _appointmentService;
-
-        public AppointmentsController(IAppointmentService appointmentService)
+        private readonly INotificationService _notificationService;
+        public AppointmentsController(IAppointmentService appointmentService, INotificationService notificationService)
         {
             _appointmentService = appointmentService;
+            _notificationService = notificationService;
         }
 
         [HttpGet("admin")]
@@ -61,11 +62,14 @@ namespace SugarMaMa.API.Controllers
                 
             };
             var result = await _appointmentService.BookAppointmentAsync(bookingModel);
-            
+            if (result != null)
+            {
+                _notificationService.SendNewAppointmentInfoToEsthetician(result.Id);
+            }
             return result != null ? (IActionResult)Ok(GenerateApptModel(result)) : BadRequest("Username already taken.");
         }
 
-        [HttpPut]
+        [HttpPut("admin")]
         public async Task<IActionResult> Update([FromBody] AppointmentModel model)
         {
             var updated = await _appointmentService.UpdateAppointmentAsync(model);

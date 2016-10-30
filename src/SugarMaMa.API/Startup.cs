@@ -62,7 +62,8 @@ namespace SugarMaMa.API
             services.AddTransient<IEstheticianService, EstheticianService>();
             services.AddTransient<IBusinessDayService, BusinessDayService>();
             services.AddTransient<ILocationService, LocationService>();
-            services.AddTransient<IAppointmentService, AppointmentService>();       
+            services.AddTransient<IAppointmentService, AppointmentService>();
+            services.AddTransient<INotificationService, NotificationService>();      
             
             services.AddSingleton(AutoMapperConfig.Configure());
 
@@ -80,6 +81,8 @@ namespace SugarMaMa.API
             })
            .AddEntityFrameworkStores<SMDbContext, Guid>()
            .AddDefaultTokenProviders();
+            
+           services.Configure<SmsSettings>(Configuration.GetSection("SmsSettings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

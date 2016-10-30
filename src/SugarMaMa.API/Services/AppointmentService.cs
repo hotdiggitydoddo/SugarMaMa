@@ -31,8 +31,6 @@ namespace SugarMaMa.API.Services
 
         public async Task<List<Appointment>> GetAppointmentsAsync()
         {
-
-            var list = new List<Appointment>();
             var appointments =
                 await _appointments.GetAsync(x => x.Client, x => x.Esthetician, x => x.Services, x => x.Location);
             return appointments.ToList();
@@ -40,7 +38,7 @@ namespace SugarMaMa.API.Services
 
         public async Task<Appointment> BookAppointmentAsync(AppointmentBookingModel model)
         {
-            var esth = _estheticians.GetByIdAsync(model.SelectedEsthetician.Id);
+            var esth = _estheticians.GetByIdAsync(model.SelectedEsthetician.Id, x => x.User);
             var services = await _spaServices.FindAsync(x => model.SelectedServices.Select(o => o.Id).Contains(x.Id));
             Client client = null;
 
