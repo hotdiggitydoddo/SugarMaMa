@@ -2,153 +2,151 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using NodaTime;
+using NodaTime.TimeZones;
 
 namespace SugarMaMa.API.Helpers
 {
     public static class DateTimeExtensions
     {
-        private const string FormalDateFormat = "MMMM dd, yyyy";
-        private const string DateFormat = "MMM dd, yyyy";
-        private const string TimeFormat = "h:mm tt";
-        /// <summary>
-        /// 5:42 PM (PST) on Oct 14, 2014
-        /// </summary>
-        public static string ToTimeAndShortDate(this DateTime date, TimeZoneInfo timeZone = null)
+        static readonly IDateTimeZoneProvider tzSource = new DateTimeZoneCache(TzdbDateTimeZoneSource.Default);
+        public static DateTime ConvertToLocalTime(this DateTime utcDateTime, string timeZoneId)
         {
-            var currentDate = DateTime.UtcNow.ConvertFromUtc(timeZone);
-            var localDate = date.ConvertFromUtc(timeZone);
-            var str = localDate.ToString(string.Format("{0} () on {1}", TimeFormat, DateFormat));
-            var localDateWithTz = str.Insert(str.IndexOf("(") + 1, GetTzAbbreviation(currentDate.IsDaylightSavingTime()
-                ? timeZone.DaylightName
-                : timeZone.StandardName));
-
-            return localDateWithTz;
-        }
-
-        /// <summary>
-        /// Tuesday, December 1, 2015 at 11:15 AM
-        /// </summary>
-        public static string ToFormalDateAndTime(this DateTime date, TimeZoneInfo timeZone = null)
-        {
-            var localDate = date.ConvertFromUtc(timeZone);
-            var str = localDate.ToString(string.Format("dddd, {0} - {1}", FormalDateFormat, TimeFormat));
-            str = str.Replace("-", "at");
-            return str;
-        }
-
-        /// <summary>
-        /// Oct 14, 2014 5:42 PM (PST)
-        /// <param name="timeZone">Passing an empty timezone defaults to PST</param>
-        /// </summary>
-        public static string ToShortDateAndTime(this DateTime date, TimeZoneInfo timeZone = null)
-        {
-            var currentDate = DateTime.UtcNow.ConvertFromUtc(timeZone);
-            var localDate = date.ConvertFromUtc(timeZone);
-            var str = localDate.ToString(string.Format("{0} {1}", DateFormat, TimeFormat));
-            var localDateWithTz = string.Format("{0} ({1})", str, GetTzAbbreviation(currentDate.IsDaylightSavingTime() ? timeZone.DaylightName : timeZone.StandardName));
-
-            return localDateWithTz;
-        }
-
-        /// <summary>
-        /// Oct 14, 2014 5:42 PM (PST)
-        /// <param name="timeZone">Passing an empty timezone defaults to PST</param>
-        /// </summary>
-        public static string ToShortDateAndTime(this DateTime? date, TimeZoneInfo timeZone = null)
-        {
-            return !date.HasValue ? string.Empty : date.Value.ToShortDateAndTime(timeZone);
-        }
-
-        /// <summary>
-        /// Oct 14, 2014
-        /// <param name="timeZone">Passing an empty timezone defaults to PST</param>
-        /// </summary>
-        public static string ToShortDate(this DateTime date, TimeZoneInfo timeZone = null)
-        {
-            return date.ConvertFromUtc(timeZone).ToString(DateFormat);
-        }
-
-        public static string ToPartialDate(this DateTime date, TimeZoneInfo timeZone = null)
-        {
-            return date.ConvertFromUtc(timeZone).ToString("MMM d");
-        }
-
-        public static string ToTimeOnly(this DateTime date, TimeZoneInfo timeZone = null)
-        {
-            return date.ConvertFromUtc(timeZone).ToString("t");
-        }
-
-        public static DateTime FromUTC(this DateTime date, TimeZoneInfo timeZone = null)
-        {
-            var d = date.ConvertFromUtc(timeZone);
-            return d;
-        }
-
-        /// <summary>
-        /// 5:42 PM
-        /// </summary>
-        /// <param name="timeZone">Passing an empty timezone defaults to PST</param>
-        public static string ToTime(this DateTime date, TimeZoneInfo timeZone = null)
-        {
-            var currentDate = DateTime.UtcNow.ConvertFromUtc(timeZone);
-            var localDate = date.ConvertFromUtc(timeZone);
-            var str = localDate.ToString(string.Format("{0}", TimeFormat));
-            var localDateWithTz = string.Format("{0} ({1})", str, GetTzAbbreviation(currentDate.IsDaylightSavingTime() ? timeZone.DaylightName : timeZone.StandardName));
-
-
-            return localDateWithTz;
-        }
-
-        private static TimeZoneInfo PacificTimeZone()
-        {
-            return TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-        }
-
-        public static DateTime ToPacificTime(this DateTime date)
-        {
-            if (date.Kind != DateTimeKind.Utc)
-                date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
-
-            return TimeZoneInfo.ConvertTime(date, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
-        }
-
-
-        private static DateTime ConvertFromUtc(this DateTime dt, TimeZoneInfo timeZone)
-        {
-            // is dayliahgt savings time go to tz abbrev and pass in daylight name or std name
-            if (dt.Kind == DateTimeKind.Unspecified)
-                DateTime.SpecifyKind(dt, DateTimeKind.Utc);
-            //Finally default to pacific time zone
-            return TimeZoneInfo.ConvertTime(dt, timeZone);
-        }
-
-      
-
-        static string GetTzAbbreviation(string timeZoneName)
-        {
-
-            //where you are converting the date and using the method
-            string output = string.Empty;
-
-            string[] timeZoneWords = timeZoneName.Split(' ');
-            foreach (string timeZoneWord in timeZoneWords)
+            DateTime dUtc;
+            switch (utcDateTime.Kind)
             {
-                if (timeZoneWord[0] != '(')
-                {
-                    output += timeZoneWord[0];
-                }
-                else
-                {
-                    output += timeZoneWord;
-                }
+                case DateTimeKind.Utc:
+                    dUtc = utcDateTime;
+                    break;
+                case DateTimeKind.Local:
+                    dUtc = utcDateTime.ToUniversalTime();
+                    break;
+                default: //DateTimeKind.Unspecified
+                    dUtc = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
+                    break;
             }
-            return output;
+
+            var timeZone = tzSource.GetZoneOrNull(timeZoneId);
+
+            var instant = Instant.FromDateTimeUtc(dUtc);
+            var zoned = new ZonedDateTime(instant, timeZone);
+            return new DateTime(
+                zoned.Year,
+                zoned.Month,
+                zoned.Day,
+                zoned.Hour,
+                zoned.Minute,
+                zoned.Second,
+                zoned.Millisecond,
+                DateTimeKind.Unspecified);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public interface ITimeZoneHelper
+    {
+        DateTime ConvertToLocalTime(DateTime utcDateTime, string timeZoneId);
+
+        DateTime ConvertToUtc(
+            DateTime localDateTime,
+            string timeZoneId,
+            ZoneLocalMappingResolver resolver = null
+        );
+
+        IReadOnlyCollection<string> GetTimeZoneList();
+    }
+
+    public class TimeZoneHelper : ITimeZoneHelper
+    {
+        public TimeZoneHelper(
+            IDateTimeZoneProvider timeZoneProvider,
+            ILogger<TimeZoneHelper> logger = null
+            )
+        {
+            tzSource = timeZoneProvider;
+            log = logger;
         }
 
-        public static DateTime UnixTimeToDateTime(long unixtime)
+        private IDateTimeZoneProvider tzSource;
+        private ILogger log;
+
+        public DateTime ConvertToLocalTime(DateTime utcDateTime, string timeZoneId)
         {
-            var sTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            return sTime.AddSeconds(unixtime);
+            DateTime dUtc;
+            switch (utcDateTime.Kind)
+            {
+                case DateTimeKind.Utc:
+                    dUtc = utcDateTime;
+                    break;
+                case DateTimeKind.Local:
+                    dUtc = utcDateTime.ToUniversalTime();
+                    break;
+                default: //DateTimeKind.Unspecified
+                    dUtc = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
+                    break;
+            }
+
+            var timeZone = tzSource.GetZoneOrNull(timeZoneId);
+            if (timeZone == null)
+            {
+                if (log != null)
+                {
+                    log.LogWarning("failed to find timezone for " + timeZoneId);
+                }
+
+                return utcDateTime;
+            }
+
+            var instant = Instant.FromDateTimeUtc(dUtc);
+            var zoned = new ZonedDateTime(instant, timeZone);
+            return new DateTime(
+                zoned.Year,
+                zoned.Month,
+                zoned.Day,
+                zoned.Hour,
+                zoned.Minute,
+                zoned.Second,
+                zoned.Millisecond,
+                DateTimeKind.Unspecified);
+        }
+
+        public DateTime ConvertToUtc(
+            DateTime localDateTime,
+            string timeZoneId,
+            ZoneLocalMappingResolver resolver = null
+            )
+        {
+            if (localDateTime.Kind == DateTimeKind.Utc) return localDateTime;
+
+            if (resolver == null) resolver = Resolvers.LenientResolver;
+            var timeZone = tzSource.GetZoneOrNull(timeZoneId);
+            if (timeZone == null)
+            {
+                if (log != null)
+                {
+                    log.LogWarning("failed to find timezone for " + timeZoneId);
+                }
+                return localDateTime;
+            }
+
+            var local = LocalDateTime.FromDateTime(localDateTime);
+            var zoned = timeZone.ResolveLocal(local, resolver);
+            return zoned.ToDateTimeUtc();
+        }
+
+        public IReadOnlyCollection<string> GetTimeZoneList()
+        {
+            return tzSource.Ids;
         }
     }
 }

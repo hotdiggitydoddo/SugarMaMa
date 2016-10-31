@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Kendo.Mvc.UI;
 using SugarMaMa.API.DAL.Entities;
 using SugarMaMa.API.DAL.Repositories;
+using SugarMaMa.API.Helpers;
 
 namespace SugarMaMa.API.Services
 {
@@ -25,9 +26,12 @@ namespace SugarMaMa.API.Services
             var appointment = await _appointments.GetByIdAsync(apptId, x => x.Esthetician, x => x.Esthetician.User,
                 x => x.Location);
 
+            var start = appointment.StartTime.ConvertToLocalTime("US/Pacific");
+            var end = appointment.EndTime.ConvertToLocalTime("US/Pacific");
+
             var body = "----SugarMaMa New Appointment----" + 
-                       "\nDate: " + appointment.StartTime.ToLocalTime().ToString("d") +
-                       "\nTime: " + appointment.StartTime.ToLocalTime().ToString("h:mm tt") + " - " + appointment.EndTime.ToLocalTime().ToString("h:mm tt") +
+                       "\nDate: " + start.ToString("d") +
+                       "\nTime: " + start.ToString("h:mm tt") + " - " + end.ToString("h:mm tt") +
                        "\nLocation: " + appointment.Location.City +
                        "\nClient Name: " + appointment.FirstName +
                        "\nServices: " + string.Join(",", appointment.Services.Select(x => x.Name));

@@ -527,7 +527,7 @@ namespace SugarMaMa.API
                 Email = "eve@test.com",
                 FirstName = "Eve",
                 LastName = "Smith",
-                PhoneNumber = "7147775555"
+                PhoneNumber = "7144729124"
             };
 
             Task.FromResult(users.CreateAsync(adminUser, "admin11").Result);

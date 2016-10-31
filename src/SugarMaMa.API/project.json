@@ -28,7 +28,8 @@
     "Microsoft.EntityFrameworkCore.Design": "1.0.1",
     "Npgsql.EntityFrameworkCore.PostgreSQL": "1.0.2",
     "Npgsql.EntityFrameworkCore.PostgreSQL.Design": "1.0.2",
-    "Npgsql": "3.1.8"
+    "Npgsql": "3.1.8",
+    "NodaTime": "2.0.0-alpha20160729"
   },
 
   "tools": {

@@ -64,7 +64,7 @@ namespace SugarMaMa.API.Controllers
             var result = await _appointmentService.BookAppointmentAsync(bookingModel);
             if (result != null)
             {
-                _notificationService.SendNewAppointmentInfoToEsthetician(result.Id);
+                await _notificationService.SendNewAppointmentInfoToEsthetician(result.Id);
             }
             return result != null ? (IActionResult)Ok(GenerateApptModel(result)) : BadRequest("Username already taken.");
         }
