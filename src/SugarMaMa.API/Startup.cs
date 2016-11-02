@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using AspNet.Security.OpenIdConnect.Server;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,6 +49,10 @@ namespace SugarMaMa.API
             services.AddCors();
             services.AddMvc();
 
+            services
+                .AddDataProtection(opt => opt.ApplicationDiscriminator = "sugarmama-api")
+                .PersistKeysToFileSystem(new DirectoryInfo("~/"));
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
@@ -88,7 +95,7 @@ namespace SugarMaMa.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            
+
             app.UseOAuthValidation();
             app.UseCors(p => p.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().AllowCredentials());
             app.UseOpenIdConnectServer(options => {
@@ -108,6 +115,9 @@ namespace SugarMaMa.API
                 //if (env.IsDevelopment())
                 options.AllowInsecureHttp = true;
 
+                var jwtSigningCert = new X509Certificate2(Path.Combine(env.ContentRootPath,"AuthSample.pfx"), Configuration["PfxPw"]);
+                options.SigningCredentials.AddCertificate(jwtSigningCert);
+
                 // Note: uncomment this line to issue JWT tokens.
                 // options.AccessTokenHandler = new JwtSecurityTokenHandler();
             });
@@ -115,8 +125,8 @@ namespace SugarMaMa.API
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment() || env.IsStaging())
-               DbContextExtensions.Seed(app);
+            //if (env.IsDevelopment() || env.IsStaging())
+            //   DbContextExtensions.Seed(app);
 
             app.UseApplicationInsightsRequestTelemetry();
 

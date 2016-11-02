@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using SugarMaMa.API.Helpers;
 using Kendo.Mvc.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using SugarMaMa.API.DAL.Entities;
 using SugarMaMa.API.Models.Appointments;
 using SugarMaMa.API.Models.Estheticians;
@@ -24,10 +25,12 @@ namespace SugarMaMa.API.Controllers
     {
         private readonly IAppointmentService _appointmentService;
         private readonly INotificationService _notificationService;
-        public AppointmentsController(IAppointmentService appointmentService, INotificationService notificationService)
+        private readonly IHostingEnvironment _env;
+        public AppointmentsController(IAppointmentService appointmentService, INotificationService notificationService, IHostingEnvironment env)
         {
             _appointmentService = appointmentService;
             _notificationService = notificationService;
+            _env = env;
         }
 
         [HttpGet("admin")]
@@ -62,7 +65,7 @@ namespace SugarMaMa.API.Controllers
                 
             };
             var result = await _appointmentService.BookAppointmentAsync(bookingModel);
-            if (result != null)
+            if (result != null && _env.IsProduction())
             {
                 await _notificationService.SendNewAppointmentInfoToEsthetician(result.Id);
             }

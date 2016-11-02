@@ -140,7 +140,7 @@ namespace SugarMaMa.API.Services
                 : await
                     _appointments.FindAsync(x => x.EstheticianId == estheticianId && x.StartTime > DateTime.UtcNow,
                         x => x.Services, x => x.Location);
-            return appts.ToList();
+            return appts.OrderBy(x => x.StartTime).ToList();
         }
     }
 
