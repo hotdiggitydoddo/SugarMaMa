@@ -82,6 +82,14 @@ namespace SugarMaMa.API.Controllers
             return new StatusCodeResult(500);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _appointmentService.DeleteAppointment(id);
+
+            return Ok(id);
+        }
+
         private AppointmentModel GenerateApptModel(Appointment appointment)
         {
             var servicesSb = new StringBuilder();

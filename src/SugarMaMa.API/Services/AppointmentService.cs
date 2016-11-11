@@ -142,7 +142,26 @@ namespace SugarMaMa.API.Services
                         x => x.Services, x => x.Location);
             return appts.OrderBy(x => x.StartTime).ToList();
         }
+
+        public async Task DeleteAppointment(int id)
+        {
+            var appt = await _appointments.GetByIdAsync(id, x => x.Client, x => x.Esthetician, x => x.Location,
+                x => x.Services);
+
+            if (appt == null)
+                return;
+
+            appt.Esthetician = null;
+            appt.Location = null;
+            appt.Services = null;
+            appt.Client = null;
+
+            await _appointments.UpdateAsync(appt);
+            await _appointments.DeleteAsync(appt);
+        }
     }
+
+  
 
     public interface IAppointmentService
     {
@@ -150,5 +169,6 @@ namespace SugarMaMa.API.Services
         Task<Appointment> BookAppointmentAsync(AppointmentBookingModel model);
         Task<Appointment> UpdateAppointmentAsync(AppointmentModel model);
         Task<List<Appointment>> GetAppointmentsByEstheticianId(int estheticianId, bool all = false);
+        Task DeleteAppointment(int id);
     }
 }
